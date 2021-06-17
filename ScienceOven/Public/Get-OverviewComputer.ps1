@@ -6,6 +6,11 @@ function Get-OverviewComputer {
     .DESCRIPTION
     Returns overview data for a specific computer
 
+    .NOTES
+    The attributes given here are influenced by the columns in the "Overview" tab of the "SQL Server Inventory - Windows" workbook.
+
+    This cmdlet is about gathering data, putting it into an object and returning it to the caller, for it to format as it sees fit.
+
     .PARAMETER Computer
     What is the Computer of interest?
 
@@ -13,7 +18,7 @@ function Get-OverviewComputer {
     What credential should be used? The default is to use the current user credential.
 
     .EXAMPLE
-    PS> Get-OverviewComputer
+    Get-OverviewComputer -Computer zeus
 
     Runs the command
     #>
@@ -24,48 +29,83 @@ function Get-OverviewComputer {
 
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         [string[]] $Computer,
+        [datetime] $ScanDateUTC = (Get-Date -AsUTC),
         [System.Management.Automation.PSCredential] $Credential
 
-        # FIXME: I might really want to pass a CIMInstance here
+        # FIXME: I might really want to pass a CIMSession parameter here. Do I?
+        # FIXME: If I have a $Credential, do I need a CIMSession? Or vice versa?
 
     )
 
     begin {
-
+        $NameSpace = 'root\CIMV2'
     }
 
     process {
         try {
 
-            # FIXME: Obviously, this is just roughed-in until I get some aspects of the build system sorted.
+            foreach ($c in $Computer) {
 
-            # $ci = New-CimSession -ComputerName $Computer
-            # $ci
-            # $r = Get-CimInstance -CimSession $ci -ClassName 'win32_computersystem'
+                $CIMSession = New-CimSession -ComputerName $c
 
-            $o = [PSCustomObject] @{
-                'Computer Name'         = $Computer
-                'Machine Name'         = 'hal9000'
-                'Scan Date (UTC)'      = Get-Date -AsUTC
-                'Manufacturer'         = 'foo'
-                'Product Name'         = 'foo'
-                'Product ID'           = 'foo'
-                'Product Version'      = 'foo'
-                'Operating System'     = 'foo'
-                'Version'              = 'foo'
-                'Service Pack'         = 'foo'
-                'Install Date (UTC)'   = 'bar'
-                'Domain'               = 'foo'
-                'Role'                 = 'foo'
-                'Physical Processors'  = 'foo'
-                'Processor Cores'      = 'foo'
-                'Logical Processors'   = 'foo'
-                'Physical Memory (MB)' = -1
-                'Logical Drives'       = 'C: (99.48 GB);  D: (1,023.87 GB);'
+                $CIMComputerSystem = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_ComputerSystem'
+                $CIMOperatingSystem = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_OperatingSystem'
+                $CIMVolumes = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_Volume'
+                $CIMComputerSystemProduct = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_ComputerSystemProduct'
+                <#
+                On multiprocessor systems, all processors should be the same, at least for this "overview" report. So, we just
+                look at the first processor in the list of processors. For more detail, like Stepping data, we would want a
+                per-processor report. That might be a Good Thing, but not here and not today.
+                #>
+                $CIMProcessor = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_Processor'
 
+                <#
+                This string mimics what SqlPowerDoc provided. I'm not sure of it's utility, but this is just "overview" data.
+                A more rational, detailed format can be in a different report.
+                #>
+                [string] $LogicalDrive = ''
+                foreach ($Volume in $CIMVolumes | Where-Object { $_.DriveType -eq 3 -and $_.DriveLetter } ) {
+                    $LogicalDrive += '{0} ({1:0.00} GB); ' -f $Volume.DriveLetter, ($Volume.Capacity / 1GB)
+                }
+                $LogicalDrive = $LogicalDrive.TrimEnd('; ')
+
+                $Props = @{
+                    'Scan Date (UTC)'     = $ScanDateUTC
+
+                    'Computer Name'       = $CIMOperatingSystem.CSName
+                    'PSComputerName'      = $CIMComputerSystem.PSComputerName
+                    # How many attributes with (nearly) the same meaning do we need?
+                    # 'Machine Name'         = $CIMComputerSystem.Name
+
+                    'Manufacturer'        = $CIMComputerSystemProduct.Vendor
+                    'Product Name'        = $CIMComputerSystemProduct.Name
+                    'Product ID'          = $CIMComputerSystemProduct.IdentifyingNumber
+                    'Product Version'     = $CIMComputerSystemProduct.Version
+
+                    'Operating System'    = $CIMOperatingSystem.Caption
+                    'Version'             = $CIMOperatingSystem.Version
+                    'Service Pack'        = $CIMOperatingSystem.ServicePackMajorVersion # fixme: Should I concat ServicePackMinorVersion here?
+
+                    'Install Date (UTC)'  = $CIMOperatingSystem.InstallDate
+
+                    'Description'         = $CIMOperatingSystem.Description
+
+                    'Domain'              = $CIMComputerSystem.Domain
+                    # FIXME: DomainRole is an integer, probably want to translate this
+                    'DomainRole'          = $CIMComputerSystem.DomainRole
+
+                    'Physical Processors' = ($CIMProcessor).Count
+                    'Processor Cores'     = $CIMProcessor[0].NumberOfCores
+                    'Logical Processors'  = $CIMProcessor[0].NumberOfLogicalProcessors
+
+                    'Physical Memory'     = $CIMComputerSystem.TotalPhysicalMemory
+                    'Logical Drives'      = $LogicalDrive
+
+                }
+                New-Object -TypeName PSObject -Property $Props
             }
-            $o
         }
+
         catch {
             Throw
         }
@@ -83,3 +123,5 @@ function Get-OverviewComputer {
 # }
 
 # Get-OverviewComputer -verbose -Computer 'PHOBOS' -Credential $c
+Get-OverviewComputer -Computer @('hera', 'zeus')
+# Get-OverviewComputer -Computer zeus
