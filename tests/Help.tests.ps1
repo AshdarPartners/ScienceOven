@@ -1,4 +1,4 @@
-# Taken with love from @juneb_get_help (https://raw.githubusercontent.com/juneb/PesterTDD/master/Module.Help.Tests.ps1)
+# Taken with love from @juneb_get_help (https://raw.githubusercontent.com/juneb/PesterTDD/master/Module.Help.Tests.ps1)# function script:FilterOutCommnParams {
 
 BeforeDiscovery {
 
@@ -25,37 +25,44 @@ BeforeDiscovery {
     ## To test, restart session.
 }
 
-BeforeAll {
-
-    function script:FilterOutCommonParams {
-        param ($Params)
-        $commonParams = @(
-            'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
-            'OutBuffer', 'OutVariable', 'PipelineVariable', 'Verbose', 'WarningAction',
-            'WarningVariable', 'Confirm', 'Whatif'
-        )
-        $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
-    }
-}
 Describe "Test help for <_.Name>" -ForEach $commands {
 
     BeforeDiscovery {
-        # Get command help, parameters, and links
+        function script:FilterOutCommnParams {
+            param ($Params)
+            $commonParams = @(
+                'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
+                'OutBuffer', 'OutVariable', 'PipelineVariable', 'Verbose', 'WarningAction',
+                'WarningVariable', 'Confirm', 'Whatif'
+            )
+            $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
+        }
+         # Get command help, parameters, and links
         $command               = $_
         $commandHelp           = Get-Help $command.Name -ErrorAction SilentlyContinue
-        $commandParameters     = script:FilterOutCommonParams -Params $command.ParameterSets.Parameters
+        $commandParameters     = script:FilterOutCommnParams -Params $command.ParameterSets.Parameters
         $commandParameterNames = $commandParameters.Name
         $helpLinks             = $commandHelp.relatedLinks.navigationLink.uri
     }
 
     BeforeAll {
+        function script:FilterOutCommnParams {
+            param ($Params)
+            $commonParams = @(
+                'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
+                'OutBuffer', 'OutVariable', 'PipelineVariable', 'Verbose', 'WarningAction',
+                'WarningVariable', 'Confirm', 'Whatif'
+            )
+            $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
+        }
+
         # These vars are needed in both discovery and test phases so we need to duplicate them here
         $command                = $_
         $commandName            = $_.Name
         $commandHelp            = Get-Help $command.Name -ErrorAction SilentlyContinue
-        $commandParameters      = script:FilterOutCommonParams -Params $command.ParameterSets.Parameters
+        $commandParameters      = script:FilterOutCommnParams -Params $command.ParameterSets.Parameters
         $commandParameterNames  = $commandParameters.Name
-        $helpParameters         = script:FilterOutCommonParams -Params $commandHelp.Parameters.Parameter
+        $helpParameters         = script:FilterOutCommnParams -Params $commandHelp.Parameters.Parameter
         $helpParameterNames     = $helpParameters.Name
     }
 
