@@ -13,7 +13,8 @@ schema: 2.0.0
 ## SYNTAX
 
 ```
-Get-OverviewComputer [-Computer] <String[]> [[-Credential] <PSCredential>] [<CommonParameters>]
+Get-OverviewComputer [-Computer] <String[]> [[-ScanDateUTC] <DateTime>] [[-Credential] <PSCredential>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,6 +46,21 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -ScanDateUTC
+{{ Fill ScanDateUTC Description }}
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 2
+Default value: (Get-Date -AsUTC)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Credential
 {{ Fill Credential Description }}
 
@@ -54,7 +70,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
