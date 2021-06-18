@@ -2,16 +2,6 @@
 
 BeforeDiscovery {
 
-    function script:FilterOutCommonParams {
-        param ($Params)
-        $commonParams = @(
-            'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
-            'OutBuffer', 'OutVariable', 'PipelineVariable', 'Verbose', 'WarningAction',
-            'WarningVariable', 'Confirm', 'Whatif'
-        )
-        $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
-    }
-
     $manifest             = Import-PowerShellDataFile -Path $env:BHPSModuleManifest
     $outputDir            = Join-Path -Path $env:BHProjectPath -ChildPath 'Output'
     $outputModDir         = Join-Path -Path $outputDir -ChildPath $env:BHProjectName
@@ -35,6 +25,18 @@ BeforeDiscovery {
     ## To test, restart session.
 }
 
+BeforeAll {
+
+    function script:FilterOutCommonParams {
+        param ($Params)
+        $commonParams = @(
+            'Debug', 'ErrorAction', 'ErrorVariable', 'InformationAction', 'InformationVariable',
+            'OutBuffer', 'OutVariable', 'PipelineVariable', 'Verbose', 'WarningAction',
+            'WarningVariable', 'Confirm', 'Whatif'
+        )
+        $params | Where-Object { $_.Name -notin $commonParams } | Sort-Object -Property Name -Unique
+    }
+}
 Describe "Test help for <_.Name>" -ForEach $commands {
 
     BeforeDiscovery {
