@@ -119,13 +119,3 @@ function Get-OverviewComputer {
 
     }
 }
-
-
-#
-# if (-not $c) {
-#     $c = Get-Credential -UserName 'corp\dstrait'
-# }
-
-# Get-OverviewComputer -verbose -Computer 'PHOBOS' -Credential $c
-Get-OverviewComputer -Computer @('hera', 'zeus')
-# Get-OverviewComputer -Computer zeus
