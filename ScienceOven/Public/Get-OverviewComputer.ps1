@@ -14,6 +14,10 @@ function Get-OverviewComputer {
     .PARAMETER Computer
     What is the Computer of interest?
 
+    .PARAMETER ScanDateUTC
+    You can pass in the date of the scan, which could be handy for tying all report-gathering to the same time. Default is the
+    current time, in UTC.
+
     .PARAMETER Credential
     What credential should be used? The default is to use the current user credential.
 
