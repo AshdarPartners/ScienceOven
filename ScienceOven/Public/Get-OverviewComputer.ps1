@@ -22,7 +22,7 @@ function Get-OverviewComputer {
     What credential should be used? The default is to use the current user credential.
 
     .EXAMPLE
-    Get-OverviewComputer -Computer zeus
+    Get-OverviewComputer -Computer localhost
 
     Runs the command
     #>
@@ -50,7 +50,12 @@ function Get-OverviewComputer {
 
             foreach ($c in $Computer) {
 
-                $CIMSession = New-CimSession -ComputerName $c
+                if ($Credential) {
+                    $CIMSession = New-CimSession -ComputerName $c -Credential $Credential
+                }
+                else {
+                    $CIMSession = New-CimSession -ComputerName $c
+                }
 
                 $CIMComputerSystem = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_ComputerSystem'
                 $CIMOperatingSystem = Get-CimInstance -CimSession $CIMSession -Namespace $NameSpace -ClassName 'Win32_OperatingSystem'
