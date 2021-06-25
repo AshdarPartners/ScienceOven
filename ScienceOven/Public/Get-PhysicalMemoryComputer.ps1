@@ -63,7 +63,7 @@ function Get-PhysicalMemoryComputer {
 
                 foreach ($Item in $CIMPhysicalMemory) {
 
-                    $Props = @{
+                    $Props = [PSCustomObject] @{
                         'Scan Date (UTC)' = $ScanDateUTC
 
                         'Computer Name'   = $CIMOperatingSystem.CSName
@@ -83,7 +83,7 @@ function Get-PhysicalMemoryComputer {
                         'Speed'           = $Item.Speed
                         'Type Detail'     = $Item.TypeDetail
                     }
-                    New-Object -TypeName PSObject -Property $Props
+                    $Props
                 }
             }
         }

@@ -78,7 +78,7 @@ function Get-OverviewComputer {
                 }
                 $LogicalDrive = $LogicalDrive.TrimEnd('; ')
 
-                $Props = @{
+                $Props = [PSCustomObject] @{
                     'Scan Date (UTC)'     = $ScanDateUTC
 
                     'Computer Name'       = $CIMOperatingSystem.CSName
@@ -111,7 +111,7 @@ function Get-OverviewComputer {
                     'Logical Drives'      = $LogicalDrive
 
                 }
-                New-Object -TypeName PSObject -Property $Props
+                $Props
             }
         }
 
