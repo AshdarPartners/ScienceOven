@@ -1,4 +1,4 @@
-function Get-PhysicalMemoryComputer {
+function Get-ComputerPhysicalMemory {
     <#
     .SYNOPSIS
     Returns PhysicalMemory data for a specific computer
@@ -22,7 +22,7 @@ function Get-PhysicalMemoryComputer {
     What credential should be used? The default is to use the current user credential.
 
     .EXAMPLE
-    Get-PhysicalMemoryComputer -Computer localhost
+    Get-ComputerPhysicalMemory -Computer localhost
 
     Runs the command
     #>

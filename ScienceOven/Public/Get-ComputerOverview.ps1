@@ -1,4 +1,4 @@
-function Get-OverviewComputer {
+function Get-ComputerOverview {
     <#
     .SYNOPSIS
     Returns overview data for a specific computer
@@ -22,7 +22,7 @@ function Get-OverviewComputer {
     What credential should be used? The default is to use the current user credential.
 
     .EXAMPLE
-    Get-OverviewComputer -Computer localhost
+    Get-ComputerOverview -Computer localhost
 
     Runs the command
     #>

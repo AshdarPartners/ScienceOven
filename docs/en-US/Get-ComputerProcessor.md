@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-ProcessorComputer
+# Get-ComputerProcessor
 
 ## SYNOPSIS
 Returns Processor data for a specific computer
@@ -13,7 +13,7 @@ Returns Processor data for a specific computer
 ## SYNTAX
 
 ```
-Get-ProcessorComputer [-Computer] <String[]> [[-ScanDateUTC] <DateTime>] [[-Credential] <PSCredential>]
+Get-ComputerProcessor [-Computer] <String[]> [[-ScanDateUTC] <DateTime>] [[-Credential] <PSCredential>]
  [<CommonParameters>]
 ```
 
@@ -24,7 +24,7 @@ Returns Processor data for a specific computer
 
 ### EXAMPLE 1
 ```
-Get-ProcessorComputer -Computer localhost
+Get-ComputerProcessor -Computer localhost
 ```
 
 Runs the command

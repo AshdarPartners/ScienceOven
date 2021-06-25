@@ -1,4 +1,4 @@
-function Get-ProcessorComputer {
+function Get-ComputerProcessor {
     <#
     .SYNOPSIS
     Returns Processor data for a specific computer
@@ -22,7 +22,7 @@ function Get-ProcessorComputer {
     What credential should be used? The default is to use the current user credential.
 
     .EXAMPLE
-    Get-ProcessorComputer -Computer localhost
+    Get-ComputerProcessor -Computer localhost
 
     Runs the command
     #>

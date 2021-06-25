@@ -5,34 +5,34 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-OverviewComputer
+# Get-ComputerPhysicalMemory
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Returns PhysicalMemory data for a specific computer
 
 ## SYNTAX
 
 ```
-Get-OverviewComputer [-Computer] <String[]> [[-ScanDateUTC] <DateTime>] [[-Credential] <PSCredential>]
+Get-ComputerPhysicalMemory [-Computer] <String[]> [[-ScanDateUTC] <DateTime>] [[-Credential] <PSCredential>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+Returns PhysicalMemory data for a specific computer
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-ComputerPhysicalMemory -Computer localhost
 ```
 
-{{ Add example description here }}
+Runs the command
 
 ## PARAMETERS
 
 ### -Computer
-{{ Fill Computer Description }}
+What is the Computer of interest?
 
 ```yaml
 Type: String[]
@@ -47,7 +47,9 @@ Accept wildcard characters: False
 ```
 
 ### -ScanDateUTC
-{{ Fill ScanDateUTC Description }}
+You can pass in the date of the scan, which could be handy for tying all report-gathering to the same time.
+Default is the
+current time, in UTC.
 
 ```yaml
 Type: DateTime
@@ -62,7 +64,8 @@ Accept wildcard characters: False
 ```
 
 ### -Credential
-{{ Fill Credential Description }}
+What credential should be used?
+The default is to use the current user credential.
 
 ```yaml
 Type: PSCredential
@@ -81,11 +84,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
-
 ## OUTPUTS
 
-### System.Object
+### System.Management.Automation.PSObject
 ## NOTES
+The attributes given here are influenced by the columns in the "PhysicalMemory" tab of the "SQL Server Inventory - Windows" workbook.
+
+This cmdlet is about gathering data, putting it into an object and returning it to the caller, for it to format as it sees fit.
 
 ## RELATED LINKS
