@@ -15,6 +15,9 @@ BeforeDiscovery {
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
     $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName
+
+    # FIXME: For the future, must be able to *externally* specify a computer name & a credential to test against & use
+    $TestComputer = 'localhost'
 }
 
 <#
@@ -30,14 +33,18 @@ Another problem is that we aren't testing the -Credential feature at all.
 #>
 Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName } {
 
-    Context '<_.CommandType> <_.Name>' -ForEach $ExportedFunctions {
+    Context '<_.CommandType> <_.Name>' -Foreach $ExportedFunctions {
 
-        It 'Does not throw for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
-            {Invoke-Expression "$Name -Computer $Computer"} | Should -Not -Throw
+        It 'Does not throw for <Computer>' -TestCases @{Computer = $TestComputer; Name = $_.Name } {
+            { Invoke-Expression "$Name -Computer $Computer" } | Should -Not -Throw
         }
 
-        It 'Returns some/any output for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name  } {
-            Invoke-Expression "$Name -Computer $Computer" | Should -Not -BeNullOrEmpty
+        It 'Returns some/any output for <Computer>' -TestCases @{Computer = $TestComputer; Name = $_.Name } {
+            if ($Computer -eq 'localhost' -and @('Get-ComputerOpticalDrive') -contains $Name) {
+                Set-ItResult -Skipped -Because 'optical drives are rare on modern systems and cmdlet often returns no result'
+            } else {
+                Invoke-Expression "$Name -Computer $Computer" | Should -Not -BeNullOrEmpty
+            }
         }
 
     }
