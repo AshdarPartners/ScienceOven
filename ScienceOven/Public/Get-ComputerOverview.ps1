@@ -93,7 +93,10 @@ function Get-ComputerOverview {
 
                     'Operating System'    = $CIMOperatingSystem.Caption
                     'Version'             = $CIMOperatingSystem.Version
-                    'Service Pack'        = $CIMOperatingSystem.ServicePackMajorVersion # fixme: Should I concat ServicePackMinorVersion here?
+
+                    # FIXME: I'm not sure that the ServicePack Major and Minor version attributes are filled anymore
+                    # I *believe* that you can find the SP version from a detailed look at the .Version
+                    # 'Service Pack'        = $CIMOperatingSystem.ServicePackMajorVersion
 
                     'Install Date (UTC)'  = $CIMOperatingSystem.InstallDate
 
