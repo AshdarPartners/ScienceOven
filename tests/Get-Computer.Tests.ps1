@@ -14,7 +14,7 @@ BeforeDiscovery {
 
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
-    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object {$_.Name -match '^Get\-'}
+    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object { $_.Name -match '^Get\-' }
 
 }
 
@@ -34,19 +34,18 @@ This could be an issue when/if I add a funtion that doesn't have -Computer as a 
 #>
 Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName } {
 
-    Context '<_.CommandType> <_.Name>' -ForEach $ExportedFunctions {
+    Context '<_.CommandType> <_.Name>' -Foreach $ExportedFunctions {
 
         It 'Does not throw for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
             { Invoke-Expression "$Name -Computer $Computer" } | Should -Not -Throw
         }
 
         It 'Returns some/any output for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
-            $ExceptedCmdlets = @(
-                'Get-ComputerOpticalDrive'
-                'Get-ComputerTapeDrive'
-            )
-            if (($Computer -eq 'localhost') -and ($ExceptedCmdlets -contains $Name)) {
-                Set-ItResult -Skipped -Because 'optical drives are rare on modern systems and cmdlet often returns no result'
+
+            if (($Computer -eq 'localhost') -and ('Get-ComputerOpticalDrive' -contains $Name)) {
+                Set-ItResult -Skipped -Because 'optical drives are rare on modern servers and cmdlet often returns no result'
+            } elseif (($Computer -eq 'localhost') -and ('Get-ComputerTapeDrive' -contains $Name)) {
+                Set-ItResult -Skipped -Because 'tape drives are rare on modern servers and cmdlet often returns no result'
             } else {
                 Invoke-Expression "$Name -Computer $Computer" | Should -Not -BeNullOrEmpty
             }
