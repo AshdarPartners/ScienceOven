@@ -14,10 +14,8 @@ BeforeDiscovery {
 
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
-    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName
+    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object {$_.Name -match '^Get\-'}
 
-    # FIXME: For the future, must be able to *externally* specify a computer name & a credential to test against & use
-    $TestComputer = 'localhost'
 }
 
 <#
@@ -29,18 +27,25 @@ I like this because it will automatically add testing for any functions I add to
 
 This could be an issue when/if I add a funtion that doesn't have -Computer as a parameter.
 
-Another problem is that we aren't testing the -Credential feature at all.
+# FIXME: We aren't testing the -Credential feature at all.
+
+# FIXME: For the future, must be able to *externally* specify a computer name & a credential to test against & use
+
 #>
 Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName } {
 
-    Context '<_.CommandType> <_.Name>' -Foreach $ExportedFunctions {
+    Context '<_.CommandType> <_.Name>' -ForEach $ExportedFunctions {
 
-        It 'Does not throw for <Computer>' -TestCases @{Computer = $TestComputer; Name = $_.Name } {
+        It 'Does not throw for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
             { Invoke-Expression "$Name -Computer $Computer" } | Should -Not -Throw
         }
 
-        It 'Returns some/any output for <Computer>' -TestCases @{Computer = $TestComputer; Name = $_.Name } {
-            if ($Computer -eq 'localhost' -and @('Get-ComputerOpticalDrive') -contains $Name) {
+        It 'Returns some/any output for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
+            $ExceptedCmdlets = @(
+                'Get-ComputerOpticalDrive'
+                'Get-ComputerTapeDrive'
+            )
+            if (($Computer -eq 'localhost') -and ($ExceptedCmdlets -contains $Name)) {
                 Set-ItResult -Skipped -Because 'optical drives are rare on modern systems and cmdlet often returns no result'
             } else {
                 Invoke-Expression "$Name -Computer $Computer" | Should -Not -BeNullOrEmpty
