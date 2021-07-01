@@ -36,10 +36,6 @@ Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunc
 
     Context '<_.CommandType> <_.Name>' -Foreach $ExportedFunctions {
 
-        It 'Does not throw for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
-            { Invoke-Expression "$Name -Computer $Computer" } | Should -Not -Throw
-        }
-
         It 'Returns some/any output for <Computer>' -TestCases @{Computer = 'localhost'; Name = $_.Name } {
 
             if (($Computer -eq 'localhost') -and ('Get-ComputerOpticalDrive' -contains $Name)) {
