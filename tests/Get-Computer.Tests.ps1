@@ -14,7 +14,11 @@ BeforeDiscovery {
 
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
-    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object { $_.Name -match '^Get\-' }
+    <#
+    The "Get-Computer" tests have a different parameter set than the "Get-SqlServer" tests, so discriminate which set of cmdlets we are
+    testing here.
+    #>
+    $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object { $_.Name -match '^Get\-Computer' }
 
 }
 
