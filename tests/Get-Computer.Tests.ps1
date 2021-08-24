@@ -36,7 +36,7 @@ This could be an issue when/if I add a funtion that doesn't have -Computer as a 
 # FIXME: For the future, must be able to *externally* specify a computer name & a credential to test against & use
 
 #>
-Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName } {
+Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName } -Tag Computer {
 
     Context '<_.CommandType> <_.Name>' -Foreach $ExportedFunctions {
 
