@@ -15,17 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    #########
-    - name: Install Pre-Requisites
-      run: |
-        # These next two lines are mainly just debugging
-        $PSVersionTable
-        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2
-        #
-        Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
-        Install-Module -Name dbatools -RequiredVersion '1.0.161'
-        Install-Module -Name invoke-sqlcmd2 -RequiredVersion '1.6.4'
-
       #########
     - name:  Setup docker container
       run: |
@@ -44,23 +33,35 @@ jobs:
         # docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --network localnet --hostname dockersql2017 --name dockersql2017 --mount 'source=shared,target=/shared' -d mcr.microsoft.com/mssql/server:2017-latest
         docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --hostname dockersql2017 --name dockersql2017 --mount 'source=shared,target=/shared' -d mcr.microsoft.com/mssql/server:2017-latest
         #
-        # I am guessing that we need this sleep here.
-        sleep 10
+        # I am guessing that we need this sleep here. Otherwise, we tend to get those 'handshake' errors
+        sleep 5
         #
 
       #########
-    - name:  Is MsSql Docker Container OK?
+      # these pre-req installs really should be done in ./build.ps1. This whole step would become superfluous.
+    - name: Install Pre-Requisites
       run: |
-        # DEBUGGING: Where are we, exactly? I need the path to the "Get Test info" PS1 files.
-        get-childitem ./Tests
+        # These next two lines are mainly just debugging
+        $PSVersionTable
+        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpersGet-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
         #
-        Write-Host "INFO:Load Credentials and ServerInstance"
-        $cred = .\Tests\Get-TestSqlCredential.ps1
-        $ServerInstance = .\Tests\Get-TestSqlInstance.ps1
-        #
-        Write-Host "INFO:Starting a query to dump out system stuff for troubleshooting"
-        $Query = "select 'Try01' as EventName, GETDATE() RightNow, SUSER_SNAME() WhoamI, @@SERVERNAME as ServerName, @@VERSION as SqlServerVersion "
-        Invoke-SqlCmd2 -Credential $Cred -ServerInstance $ServerInstance -query $Query
+        Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
+        Install-Module -Name dbatools -RequiredVersion '1.0.161' -scope CurrentUser
+        Install-Module -Name invoke-sqlcmd2 -RequiredVersion '1.6.4' -scope CurrentUser
+
+      #########
+    # - name:  Is MsSql Docker Container OK?
+    #   run: |
+    #     # DEBUGGING: Where are we, exactly? I need the path to the "Get Test info" PS1 files.
+    #     get-childitem .\Tests
+    #     #
+    #     Write-Host "INFO:Load Credentials and ServerInstance"
+    #     $cred = .\Tests\Get-TestSqlCredential.ps1
+    #     $ServerInstance = .\Tests\Get-TestSqlInstance.ps1
+    #     #
+    #     Write-Host "INFO:Starting a query to dump out system stuff for troubleshooting"
+    #     $Query = "select 'Try01' as EventName, GETDATE() RightNow, SUSER_SNAME() WhoamI, @@SERVERNAME as ServerName, @@VERSION as SqlServerVersion "
+    #     Invoke-SqlCmd2 -Credential $Cred -ServerInstance $ServerInstance -query $Query
 
       #########
     - name: Run build.ps1 / Test
