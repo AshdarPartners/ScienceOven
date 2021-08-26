@@ -20,4 +20,11 @@
     'PSScriptAnalyzer' = @{
         Version = '1.19.1'
     }
+    'dbatools' = @{
+        Version = '1.0.161'
+    }
+    'Invoke-SqlCmd2' = @{
+        Version = '1.6.4'
+    }
+
 }
