@@ -16,5 +16,16 @@ even if they are, it still isn't _quite_ what I want.
 Plus, I'd like to have a "fully fledged" GitHub project, with a "devops" pipeline and all the trimmings.
 ## Installation
 Eventually, I hope to wire this into the well-established GitHub/PSGallery scheme.
-## Examples
 
+## Build Issues
+I used Platypus to generate this project because it seemed to be what the cool kids did. Platypus wrote a build.ps1 for me and created a requirements.psd1 file. This file specifies certain modules and version levels, and specifies that they should be installed in the scope of 'CurrentUser'.
+
+The problem is that the task runners that Github Actions provide already have Pester installed in the 'AllUser' scope.
+When build.ps1 does not notice that the requested version of Pester is installed, so it tries to install it and fails.
+Apparently, you can't the same version of a module installed as CurrentUser and AllUser. Rather than trying to bug-fix
+PSDepends, I am just pulling out the Pester requirement information and putting it into requirements.other.psd1, for
+safe-keeping. The chances are any machine you run on will have Pester installed, though it might be an old version. If
+you are trying to test locally, you will find that the Tests.ps1 files are written for Pester 5.x (though they might be compatible with 4.x too) and that the really old, 'default' versions of Pester will choke on the new syntax.
+
+## Examples
+FIXME: We need some examples.
