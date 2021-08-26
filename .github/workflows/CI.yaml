@@ -20,7 +20,8 @@ jobs:
       run: |
         # create a shared network.
         # I don't know why I need this, but when I try to remove it, the step fails.
-        docker network create localnet
+        # this doesn't work with windows containers. I suspect that I don't need it at all.
+        # docker network create localnet
         #
         # create a shared volume
         # docker volume create shared
@@ -30,7 +31,8 @@ jobs:
         # Is this mount syntax for linux?  I am trying to run in a windows task runner?
         # Do I even need persistent storage?
         #docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --network localnet --hostname dockersql2017 --name dockersql2017 --mount 'source=shared,target=/shared' -d mcr.microsoft.com/mssql/server:2017-latest
-        docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --network localnet --hostname dockersql2017 --name dockersql2017 -d mcr.microsoft.com/mssql/server:2017-latest
+        #docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --network localnet --hostname dockersql2017 --name dockersql2017 -d mcr.microsoft.com/mssql/server:2017-latest
+        docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --hostname dockersql2017 --name dockersql2017 -d mcr.microsoft.com/mssql/server:2017-latest
 
       #########
     - name:  Is MsSql Docker Container OK?
