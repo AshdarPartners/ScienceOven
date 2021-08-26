@@ -43,7 +43,7 @@ jobs:
       run: |
         # These next two lines are mainly just debugging
         $PSVersionTable
-        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpersGet-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
+        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
         #
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
         Install-Module -Name dbatools -RequiredVersion '1.0.161' -scope CurrentUser
