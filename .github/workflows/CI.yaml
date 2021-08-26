@@ -19,8 +19,9 @@ jobs:
     - name: Install Pre-Requisites
       run: |
         # These next two lines are mainly just debugging
-        # $PSVersionTable
-        # Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2
+        $PSVersionTable
+        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2
+        #
         Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
         Install-Module -Name dbatools -RequiredVersion '1.0.161'
         Install-Module -Name invoke-sqlcmd2 -RequiredVersion '1.6.4'
