@@ -45,7 +45,7 @@ Describe "Tests for $filename" -Tag $Filename, SqlServerAgent, SQLServer {
             SqlCredential = $SqlCredential
         }
 
-        # I will mimic the dbatools testing workflow when I need to.
+        # I am mimicking the dbatools Pester code when. SqlCollaborative knows more about using dbatools in tests than I do...
         $server = Connect-DbaInstance @cp -Database 'master'
         $server.Query("EXEC msdb.dbo.sp_add_alert @name=N'test alert',@message_id=0,@severity=6,@enabled=1,@delay_between_responses=0,@include_event_description_in=0,@category_name=N'[Uncategorized]',@job_id=N'00000000-0000-0000-0000-000000000000'")
         $null = New-DbaAgentOperator @cp -Operator 'DBA' -Force -EmailAddress 'operator@operator.com' -PagerDay 'Everyday'
