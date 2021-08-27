@@ -16,38 +16,38 @@ jobs:
     - uses: actions/checkout@v2
 
       #########
+      # It might be better to do this in build.ps1
     - name:  Setup docker container
       run: |
-        # create a shared network.
-        # I don't know why I need this, but when I try to remove it, the step fails.
-        # this doesn't work with windows containers. I suspect that I don't need it at all.
-        #docker network create localnet
-        #
         # create a shared volume
         docker volume create shared
         #
         # setup container and expose port
         Write-Host "INFO:Start the mssql container"
-        # Is this mount syntax for linux?  I am trying to run in a windows task runner?
-        # Do I even need persistent storage?
-        # docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --network localnet --hostname dockersql2017 --name dockersql2017 --mount 'source=shared,target=/shared' -d mcr.microsoft.com/mssql/server:2017-latest
+        # Do I even need persistent storage? Kind of thinking about the future, when I might need to restore a .bak or .dacpac
         docker run -p 1433:1433 -e ACCEPT_EULA -e SA_PASSWORD -e MSSQL_PID --hostname dockersql2017 --name dockersql2017 --mount 'source=shared,target=/shared' -d mcr.microsoft.com/mssql/server:2017-latest
         #
-        # I am guessing that we need this sleep here. Otherwise, we tend to get those 'handshake' errors
+        # I am guessing that we need this sleep here. Otherwise, we tend to get those 'handshake' errors when connecting
         sleep 5
         #
 
+
+      # after some experimentation, I suspect that this commented-out stuff is all superfluous.
+      # The intent seems to be that Build.ps1 does "everything".
+      # These GH Actions/tasks/steps are shims to run stuff via build.ps1.
+
       #########
       # these pre-req installs really should be done in ./build.ps1. This whole step would become superfluous.
-    - name: Install Pre-Requisites
-      run: |
-        # These next two lines are mainly just debugging
-        $PSVersionTable
-        Get-Module -listavailable -Name dbatools,sqlserver,pester,invoke-sqlcmd2,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
-        #
-        Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
-        Install-Module -Name dbatools -RequiredVersion '1.0.161' -scope CurrentUser
-        Install-Module -Name invoke-sqlcmd2 -RequiredVersion '1.6.4' -scope CurrentUser
+      # if you want to do something like Invoke-DbaQuery or Publish-DbaDacpackage, you will need to install a correct version
+      # of dbatools here, or you will have to do it all in build.ps1 (which is probably the better idea)
+    # - name: Install Pre-Requisites
+    #   run: |
+    #     # These next two lines are mainly just debugging
+    #     # $PSVersionTable
+    #     # Get-Module -listavailable -Name dbatools,sqlserver,pester,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
+    #     #
+    #     Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
+    #     Install-Module -Name dbatools -RequiredVersion '1.1.0' -scope CurrentUser
 
       #########
     # - name:  Is MsSql Docker Container OK?
@@ -61,7 +61,7 @@ jobs:
     #     #
     #     Write-Host "INFO:Starting a query to dump out system stuff for troubleshooting"
     #     $Query = "select 'Try01' as EventName, GETDATE() RightNow, SUSER_SNAME() WhoamI, @@SERVERNAME as ServerName, @@VERSION as SqlServerVersion "
-    #     Invoke-SqlCmd2 -Credential $Cred -ServerInstance $ServerInstance -query $Query
+    #     Invoke-DbaQuery -SqlCredential $Cred -SqlInstance $ServerInstance -query $Query
 
       #########
     - name: Run build.ps1 / Test
