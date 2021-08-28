@@ -20,6 +20,11 @@ BeforeDiscovery {
     #>
     $ExportedFunctions = Get-Command -CommandType Cmdlet, Function -Module $moduleName | Where-Object { $_.Name -match '^Get\-Computer' }
 
+    $WindowsIdentity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+    $WindowsPrincipal = New-Object System.Security.Principal.WindowsPrincipal($WindowsIdentity)
+    $AdministratorRole = [System.Security.Principal.WindowsBuiltInRole]::Administrator
+    $IsElevated = $WindowsPrincipal.IsInRole($AdministratorRole)
+
 }
 
 <#
@@ -46,6 +51,8 @@ Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunc
                 Set-ItResult -Skipped -Because 'optical drives are rare on modern servers and cmdlet often returns no result'
             } elseif (($Computer -eq 'localhost') -and ('Get-ComputerTapeDrive' -contains $Name)) {
                 Set-ItResult -Skipped -Because 'tape drives are rare on modern servers and cmdlet often returns no result'
+            } elseif ((-not $IsElevated) -and ('Get -ComputerPowerPlan' -contains $Name)) {
+                Set-ItResult -Skipped -Because 'the test must run in an elevated session to access Power Plan data'
             } else {
                 Invoke-Expression "$Name -Computer $Computer" | Should -Not -BeNullOrEmpty
             }
