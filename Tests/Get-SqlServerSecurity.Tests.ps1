@@ -15,6 +15,7 @@ BeforeDiscovery {
     # $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
     $SubjectArea = (Split-Path -Path $PSCommandPath -Leaf) -Replace 'Get\-','' -Replace '.Tests.ps1',''
+
 }
 
 <#
@@ -41,9 +42,9 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
         # I am mimicking the dbatools Pester code when. SqlCollaborative knows more about using dbatools in tests than I do...
         $server = Connect-DbaInstance @cp -Database 'master'
-        $server.Query("EXEC msdb.dbo.sp_add_alert @name=N'test alert',@message_id=0,@severity=6,@enabled=1,@delay_between_responses=0,@include_event_description_in=0,@category_name=N'[Uncategorized]',@job_id=N'00000000-0000-0000-0000-000000000000'")
-        $null = New-DbaAgentOperator @cp -Operator 'DBA' -Force -EmailAddress 'operator@operator.com' -PagerDay 'Everyday'
-        $null = New-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -FrequencyType 'Monthly' -FrequencyInterval 10 -FrequencyRecurrenceFactor 1 -Force
+        # $server.Query("EXEC msdb.dbo.sp_add_alert @name=N'test alert',@message_id=0,@severity=6,@enabled=1,@delay_between_responses=0,@include_event_description_in=0,@category_name=N'[Uncategorized]',@job_id=N'00000000-0000-0000-0000-000000000000'")
+        # $null = New-DbaAgentOperator @cp -Operator 'DBA' -Force -EmailAddress 'operator@operator.com' -PagerDay 'Everyday'
+        # $null = New-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -FrequencyType 'Monthly' -FrequencyInterval 10 -FrequencyRecurrenceFactor 1 -Force
     }
 
     AfterAll {
@@ -56,60 +57,39 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
             SqlCredential = $SqlCredential
         }
         $server = Connect-DbaInstance @cp -Database 'master'
-        $server.Query("EXEC msdb.dbo.sp_delete_alert @name=N' test alert'")
-        $null = Remove-DbaAgentOperator @cp -Operator 'DBA' -Confirm:$false
-        $null = Remove-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -Confirm:$false
+        # $server.Query("EXEC msdb.dbo.sp_delete_alert @name=N' test alert'")
+        # $null = Remove-DbaAgentOperator @cp -Operator 'DBA' -Confirm:$false
+        # $null = Remove-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -Confirm:$false
 
     }
 
-    Context 'Get-SqlServerAgentConfiguration' {
-        It 'Returns some/any output for Get-SqlServerAgentConfiguration' {
+    Context 'Get-SqlServerSecurityServerLogin' {
+        It 'Returns some/any output for Get-SqlServerSecurityServerLogin' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
         }
     }
 
-    Context 'Get-SqlServerAgentJob' {
-        It 'Returns some/any output for Get-SqlServerAgentJob' {
+    Context 'Get-SqlServerSecurityServerRole' {
+        It 'Returns some/any output for Get-SqlServerSecurityServerRole' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
         }
     }
 
-    Context 'Get-SqlServerAgentJobStep' {
-        It 'Returns some/any output for Get-SqlServerAgentJobStep' {
+    Context 'Get-SqlServerSecurityCredential' {
+        It 'Returns some/any output for Get-SqlServerSecurityCredential' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
         }
     }
 
-    Context 'Get-SqlServerAgentSchedule' {
-        It 'Returns some/any output for Get-SqlServerAgentSchedule' {
-            Get-SqlServerAgentSchedule @cp | Should -Not -BeNullOrEmpty
-        }
-    }
-
-    # There are "Job alerts" and there are "Agent Alerts". DbaTools supports Get-DbaAgentAlert only.
-    Context 'Get-SqlServerAgentJobAlert' {
-        It 'Returns some/any output for Get-SqlServerAgentJobAlert' {
+    Context 'Get-SqlServerSecurityAudit' {
+        It 'Returns some/any output for Get-SqlServerSecurityAudit' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
         }
     }
 
-    # there is no Dbatools\Get-DbaAgentJobNotification.
-    Context 'Get-SqlServerAgentJobNotification' {
-        It 'Returns some/any output for Get-SqlServerAgentJobNotification' {
+    Context 'Get-SqlServerSecurityAuditSpecification' {
+        It 'Returns some/any output for Get-SqlServerSecurityAuditSpecification' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
-        }
-    }
-
-    # There are "Job alerts" and there are "Agent Alerts". DbaTools supports Get-DbaAgentAlert only.
-    Context 'Get-SqlServerAgentAlert' {
-        It 'Returns some/any output for Get-SqlServerAgentAlert' {
-            Get-SqlServerAgentAlert @cp | Should -Not -BeNullOrEmpty
-        }
-    }
-
-    Context 'Get-SqlServerAgentOperator' {
-        It 'Returns some/any output for Get-SqlServerAgentOperator' {
-            Get-SqlServerAgentOperator @cp | Should -Not -BeNullOrEmpty
         }
     }
 }
