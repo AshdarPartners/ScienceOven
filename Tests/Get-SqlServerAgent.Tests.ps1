@@ -14,7 +14,7 @@ BeforeDiscovery {
 
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
-    $filename = $MyInvocation.MyCommand.Name.Replace('.Tests.ps1', '')
+    $SubjectArea = $MyInvocation.MyCommand.Name.Replace('.Tests.ps1', '').Replace('Get-', '')
 
 }
 
@@ -27,13 +27,8 @@ I like this because it will automatically add testing for any functions I add to
 
 This could be an issue when/if I add a funtion that doesn't have -Computer as a parameter.
 
-# FIXME: We aren't testing the -Credential feature at all.
-
-# FIXME: For the future, must be able to *externally* specify a computer name & a credential to test against & use
-
 #>
-# Describe "General Test $moduleName" -ForEach @{ExportedFunctions = $ExportedFunctions; moduleName = $ModuleName; SqlInstance = $SqlInstance } {
-Describe "Tests for $filename" -Tag $Filename, SqlServerAgent, SQLServer {
+Describe "Tests for $SubjectArea" -Tag $SubjectArea, SQLServer {
 
     BeforeAll {
         $SqlInstance = (Invoke-Expression -Command (Join-Path -Path $PSScriptRoot -ChildPath 'Get-TestSqlInstance.ps1'))
@@ -89,7 +84,6 @@ Describe "Tests for $filename" -Tag $Filename, SqlServerAgent, SQLServer {
     Context 'Get-SqlServerAgentSchedule' {
         It 'Returns some/any output for Get-SqlServerAgentSchedule' {
             Get-SqlServerAgentSchedule @cp | Should -Not -BeNullOrEmpty
-            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
         }
     }
 
@@ -100,7 +94,7 @@ Describe "Tests for $filename" -Tag $Filename, SqlServerAgent, SQLServer {
         }
     }
 
-    # there is no Dbatools\Get=DbaAgentJobNotification.
+    # there is no Dbatools\Get-DbaAgentJobNotification.
     Context 'Get-SqlServerAgentJobNotification' {
         It 'Returns some/any output for Get-SqlServerAgentJobNotification' {
             Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
