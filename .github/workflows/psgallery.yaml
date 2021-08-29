@@ -13,5 +13,6 @@ jobs:
 
       - name: Publishing
         run: |
-          Publish-Module -Path '...' -NuGetApiKey ${{ secrets.PSGALLERY }}
+          # I'm unsure if the path is correct.
+          Publish-Module -Path './ScienceOven/ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
         shell: pwsh
