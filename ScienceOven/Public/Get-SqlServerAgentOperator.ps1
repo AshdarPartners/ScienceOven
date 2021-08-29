@@ -61,10 +61,10 @@ function Get-SqlServerAgentOperator {
                     $Props = [PSCustomObject] @{
                         'Scan Date (UTC)'        = $ScanDateUTC
 
-                        'ComputerName'                  = $Item.ComputerName
-                        'PSComputerName'                = $Item.ComputerName
-                        'InstanceName'                  = $Item.InstanceName
-                        'SqlInstance'                   = $Item.SqlInstance
+                        'ComputerName'           = $Item.ComputerName
+                        'PSComputerName'         = $Item.ComputerName
+                        'InstanceName'           = $Item.InstanceName
+                        'SqlInstance'            = $Item.SqlInstance
                         # How many attributes with (nearly) the same meaning do we need?
                         # 'Machine Name'         = $CIMComputerSystem.Name
 

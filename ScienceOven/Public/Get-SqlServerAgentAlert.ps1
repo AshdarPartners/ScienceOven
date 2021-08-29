@@ -59,48 +59,48 @@ function Get-SqlServerAgentAlert {
                 foreach ($Item in $Items) {
 
                     $Props = [PSCustomObject] @{
-                        'Scan Date (UTC)'               = $ScanDateUTC
+                        'Scan Date (UTC)'         = $ScanDateUTC
 
-                        'ComputerName'                  = $Item.ComputerName
-                        'PSComputerName'                = $Item.ComputerName
-                        'InstanceName'                  = $Item.InstanceName
-                        'SqlInstance'                   = $Item.SqlInstance
+                        'ComputerName'            = $Item.ComputerName
+                        'PSComputerName'          = $Item.ComputerName
+                        'InstanceName'            = $Item.InstanceName
+                        'SqlInstance'             = $Item.SqlInstance
                         # How many attributes with (nearly) the same meaning do we need?
                         # 'Machine Name'         = $CIMComputerSystem.Name
 
-                        'Notifications'                    = $Item.'Notifications'
-                        'LastRaised'                    = $Item.'LastRaised'
+                        'Notifications'           = $Item.'Notifications'
+                        'LastRaised'              = $Item.'LastRaised'
 
-                        'AlertType'                          = $Item.'AlertType'
+                        'AlertType'               = $Item.'AlertType'
 
-                        'CategoryName'                    = $Item.'CategoryName'
+                        'CategoryName'            = $Item.'CategoryName'
 
-                        'CountResetDate'                    = $Item.'CountResetDate'
-                        'DatabaseName'                    = $Item.'DatabaseName'
+                        'CountResetDate'          = $Item.'CountResetDate'
+                        'DatabaseName'            = $Item.'DatabaseName'
                         'Name'                    = $Item.'Name'
-                        'DelayBetweenResponses' = $Item.'DelayBetweenResponses'
+                        'DelayBetweenResponses'   = $Item.'DelayBetweenResponses'
 
                         'EventDescriptionKeyword' = $Item.'EventDescriptionKeyword'
-                        'EventSource' = $Item.'EventSource'
-                        'HasNotification' = $Item.'HasNotification'
+                        'EventSource'             = $Item.'EventSource'
+                        'HasNotification'         = $Item.'HasNotification'
 
                         'IncludeEventDescription' = $Item.'IncludeEventDescription'
-                        'Enabled' = $Item.'IsEnabled'
+                        'Enabled'                 = $Item.'IsEnabled'
 
-                        'JobID' = $Item.'JobID'
-                        'JobName' = $Item.'JobName'
+                        'JobID'                   = $Item.'JobID'
+                        'JobName'                 = $Item.'JobName'
 
-                        'LastOccurrenceDate' = $Item.'LastOccurrenceDate'
-                        'LastResponseDate' = $Item.'LastResponseDate'
+                        'LastOccurrenceDate'      = $Item.'LastOccurrenceDate'
+                        'LastResponseDate'        = $Item.'LastResponseDate'
 
-                        'NotificationMessage' = $Item.'NotificationMessage'
+                        'NotificationMessage'     = $Item.'NotificationMessage'
 
-                        'OccurrenceCount' = $Item.'OccurrenceCount'
-                        'PerformanceCondition' = $Item.'PerformanceCondition'
-                        'Severity' = $Item.'Severity'
+                        'OccurrenceCount'         = $Item.'OccurrenceCount'
+                        'PerformanceCondition'    = $Item.'PerformanceCondition'
+                        'Severity'                = $Item.'Severity'
 
-                        'WmiEventNamespace' = $Item.'WmiEventNamespace'
-                        'WmiEventQuery' = $Item.'WmiEventQuery'
+                        'WmiEventNamespace'       = $Item.'WmiEventNamespace'
+                        'WmiEventQuery'           = $Item.'WmiEventQuery'
 
                     }
                     $Props
