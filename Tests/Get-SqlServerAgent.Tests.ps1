@@ -14,8 +14,7 @@ BeforeDiscovery {
 
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
-    $SubjectArea = $MyInvocation.MyCommand.Name.Replace('.Tests.ps1', '').Replace('Get-', '')
-
+    $SubjectArea = (Split-Path -Path $PSCommandPath -Leaf) -Replace 'Get\-','' -Replace '.Tests.ps1',''
 }
 
 <#
@@ -28,7 +27,7 @@ I like this because it will automatically add testing for any functions I add to
 This could be an issue when/if I add a funtion that doesn't have -Computer as a parameter.
 
 #>
-Describe "Tests for $SubjectArea" -Tag $SubjectArea, SQLServer {
+Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
     BeforeAll {
         $SqlInstance = (Invoke-Expression -Command (Join-Path -Path $PSScriptRoot -ChildPath 'Get-TestSqlInstance.ps1'))
