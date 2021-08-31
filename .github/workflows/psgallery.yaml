@@ -14,5 +14,10 @@ jobs:
       - name: Publishing
         run: |
           # I'm unsure if the path is correct.
-          Publish-Module -Path './ScienceOven/ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
+          write-host 'where am I'
+          pwd
+          write-host 'where is it'
+          ls ScienceOven.psd1 -Recurse
+          write-host 'Publish'
+          Publish-Module -Path '.\ScienceOven\ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
         shell: pwsh
