@@ -23,5 +23,5 @@ jobs:
           write-host 'Publish'
           # Publish-Module -Path '.\ScienceOven\ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
           # Workin directory is: /home/runner/work/ScienceOven/ScienceOven'
-          Publish-Module -Path '.\ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }} -verbose
+          Publish-Module -Path '/home/runner/work/ScienceOven/ScienceOven/ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }} -verbose
         shell: pwsh
