@@ -15,9 +15,11 @@ jobs:
         run: |
           # I'm unsure if the path is correct.
           write-host 'where am I'
-          pwd
+          Get-Location
           write-host 'where is it'
-          ls ScienceOven.psd1 -Recurse
+          Get-ChildItem -filter ScienceOven.psd1 -Recurse
           write-host 'Publish'
+          # Publish-Module -Path '.\ScienceOven\ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
+          # Workin directory is: /home/runner/work/ScienceOven/ScienceOven'
           Publish-Module -Path '.\ScienceOven\ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
         shell: pwsh
