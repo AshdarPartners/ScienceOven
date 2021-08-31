@@ -12,7 +12,7 @@
 RootModule = 'ScienceOven.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -24,13 +24,13 @@ GUID = '567a2435-9116-495a-a194-4419f2caa7e1'
 Author = 'Darin Strait'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+CompanyName = 'Ashdar Partners'
 
 # Copyright statement for this module
-Copyright = '(c) 2021 Darin Strait. All rights reserved.'
+Copyright = '(c) 2021 by Ashdar Partners, licensed under MIT.'
 
 # Description of the functionality provided by this module
-Description = 'Simplify SQL Server documentation'
+Description = 'Enables IT Pros to document Windows Server and SQL Server installations'
 
 # Minimum version of the Windows PowerShell engine required by this module
 # PowerShellVersion = ''
@@ -93,22 +93,25 @@ AliasesToExport = '*'
 PrivateData = @{
 
     PSData = @{
+        Category = 'Documentation Tool'
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('sqlserver','dba','sql','windows','documentation')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/ashdar/ScienceOven/blob/master/LICENSE'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/ashdar/ScienceOven'
 
         # A URL to an icon representing this module.
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'https://github.com/ashdar/ScienceOven/blob/master/CHANGELOG.md'
 
+        # Indicates this is a pre-release/testing version of the module.
+        IsPrerelease = 'True'
     } # End of PSData hashtable
 
 } # End of PrivateData hashtable

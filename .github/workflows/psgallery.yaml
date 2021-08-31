@@ -1,0 +1,18 @@
+# LINK
+# https://www.robstr.dev/publish-powershellgallery-automatic-github-actions/
+name: PSGallery
+on:
+  release:
+    types: [published]
+jobs:
+  psgallery_publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Publishing
+        run: |
+          # I'm unsure if the path is correct.
+          Publish-Module -Path './ScienceOven/ScienceOven.psd1' -NuGetApiKey ${{ secrets.PSGALLERY }}
+        shell: pwsh
