@@ -13,6 +13,7 @@ jobs:
 
       - name: Publishing
         run: |
+          # https://github.com/MicrosoftDocs/PowerShell-Docs/blob/staging/reference/7.1/PowerShellGet/Publish-Module.md
           # I'm sure the path is wrong, but I can't find enough info the the logs to find it.
           write-host 'where am I'
           Get-Location
