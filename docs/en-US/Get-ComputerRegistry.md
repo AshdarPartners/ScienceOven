@@ -58,7 +58,7 @@ Aliases:
 
 Required: False
 Position: 2
-Default value: (Get-Date -AsUTC)
+Default value: (Get-Date).ToUniversalTime()
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

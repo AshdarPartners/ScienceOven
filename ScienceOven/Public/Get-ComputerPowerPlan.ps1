@@ -44,7 +44,7 @@ function Get-ComputerPowerPlan {
 
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         [string[]] $Computer,
-        [datetime] $ScanDateUTC = (Get-Date -AsUTC),
+        [datetime] $ScanDateUTC = (Get-Date).ToUniversalTime(),
         [System.Management.Automation.PSCredential] $Credential
 
         # FIXME: I might really want to pass a CIMSession parameter here. Do I?

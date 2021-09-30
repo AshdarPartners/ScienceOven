@@ -36,7 +36,7 @@ function Get-SqlServerAgentOperator {
 
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         [string[]] $SqlInstance,
-        [datetime] $ScanDateUTC = (Get-Date -AsUTC),
+        [datetime] $ScanDateUTC = (Get-Date).ToUniversalTime(),
         [System.Management.Automation.PSCredential] $SqlCredential
 
     )
