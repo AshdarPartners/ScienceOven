@@ -6,8 +6,9 @@
     # This package is needed to gather data for Subject Areas.
     # IOW, you can't run ScienceOven without dbatools-it is a required dependency.
     # 1.1.0 was the "last big release", as of 2021/08/27
+    # 1.1.21 got me around the wierd "can't load SNI" problems.
     'dbatools' = @{
-        Version = '1.1.0'
+        Version = '1.1.21'
     }
 
     # These four packages are mainly for "the build system" or frameworked testing that build.ps does.
