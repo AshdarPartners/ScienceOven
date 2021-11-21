@@ -29,6 +29,7 @@ This could be an issue when/if I add a funtion that doesn't have -Computer as a 
 #>
 Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
+
     BeforeAll {
         $SqlInstance = (Invoke-Expression -Command (Join-Path -Path $PSScriptRoot -ChildPath 'Get-TestSqlInstance.ps1'))
 
@@ -41,9 +42,13 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
         # I am mimicking the dbatools Pester code when. SqlCollaborative knows more about using dbatools in tests than I do...
         $server = Connect-DbaInstance @cp -Database 'master'
-        $server.Query("EXEC msdb.dbo.sp_add_alert @name=N'test alert',@message_id=0,@severity=6,@enabled=1,@delay_between_responses=0,@include_event_description_in=0,@category_name=N'[Uncategorized]',@job_id=N'00000000-0000-0000-0000-000000000000'")
-        $null = New-DbaAgentOperator @cp -Operator 'DBA' -Force -EmailAddress 'operator@operator.com' -PagerDay 'Everyday'
+        $server.Query("EXEC msdb.dbo.sp_add_alert @name=N'ScienceOvenTestAlert',@message_id=0,@severity=6,@enabled=1,@delay_between_responses=0,@include_event_description_in=0,@category_name=N'[Uncategorized]',@job_id=N'00000000-0000-0000-0000-000000000000'")
+
+        $null = New-DbaAgentOperator @cp -Operator 'ScienceOvenTestOperator' -Force -EmailAddress 'operator@nowhere.com' -PagerDay 'Everyday'
         $null = New-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -FrequencyType 'Monthly' -FrequencyInterval 10 -FrequencyRecurrenceFactor 1 -Force
+
+        $null = New-DbaAgentJob @cp -Job 'ScienceOvenTestJob' -Description 'A test job for ScienceOven unit tests'
+        $null = New-DbaAgentJobStep @cp -Job 'ScienceOvenTestJob' -StepName 'Step1' -Command 'select getdate()'
     }
 
     AfterAll {
@@ -56,9 +61,13 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
             SqlCredential = $SqlCredential
         }
         $server = Connect-DbaInstance @cp -Database 'master'
-        $server.Query("EXEC msdb.dbo.sp_delete_alert @name=N' test alert'")
-        $null = Remove-DbaAgentOperator @cp -Operator 'DBA' -Confirm:$false
+        $null = Remove-DbaAgentJob @cp -Job 'ScienceOvenTestJob'
         $null = Remove-DbaAgentSchedule @cp -Schedule 'scienceoven_MonthlyTest' -Confirm:$false
+
+        # $null = New-DbaAgentJobStep @cp -Job 'ScienceOvenTestJob' -StepName 'Step1' -Command 'select getdate()'
+        $null = Remove-DbaAgentOperator @cp -Operator 'ScienceOvenTestOperator' -Confirm:$false
+
+        $server.Query("EXEC msdb.dbo.sp_delete_alert @name=N'ScienceOvenTestAlert'")
 
     }
 
@@ -70,13 +79,15 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
     Context 'Get-SqlServerAgentJob' {
         It 'Returns some/any output for Get-SqlServerAgentJob' {
-            Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            Get-SqlServerAgentJob @cp | Should -Not -BeNullOrEmpty
         }
     }
 
     Context 'Get-SqlServerAgentJobStep' {
         It 'Returns some/any output for Get-SqlServerAgentJobStep' {
-            Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            Get-SqlServerAgentJobStep @cp | Should -Not -BeNullOrEmpty
         }
     }
 
