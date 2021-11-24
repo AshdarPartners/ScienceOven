@@ -81,7 +81,7 @@ function Get-SqlServerAgentJobStep {
                         'OnSuccessAction'        = $item.'OnSuccessAction'
                         'OnSuccessStep'          = $item.'OnSuccessStep'
                         'RetryAttempts'          = $item.'RetryAttempts'
-                        'RetryIntervalmins'      = $item.'RetryIntervalmins'
+                        'RetryIntervalMins'      = $item.'RetryIntervalMins'
                         'RunAs'                  = $item.'RunAs'
                         'SuccessExitCode'        = $item.'SuccessExitCode'
                         'Type'                   = $item.'Type'
