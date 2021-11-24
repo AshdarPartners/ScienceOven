@@ -12,7 +12,8 @@ BeforeDiscovery {
     $Path = Join-Path -Path $Path -ChildPath $moduleName
     $Path = Join-Path -Path $Path -ChildPath ($moduleName + '.psd1')
 
-    # $ModuleInfo = Import-Module -Name $Path -Force -PassThru
+    Get-Module -All -Name $moduleName | Remove-Module
+    $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
     $SubjectArea = (Split-Path -Path $PSCommandPath -Leaf) -Replace 'Get\-','' -Replace '.Tests.ps1',''
 

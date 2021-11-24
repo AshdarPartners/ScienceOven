@@ -12,6 +12,7 @@ BeforeDiscovery {
     $Path = Join-Path -Path $Path -ChildPath $moduleName
     $Path = Join-Path -Path $Path -ChildPath ($moduleName + '.psd1')
 
+    Get-Module -All -Name $moduleName | Remove-Module
     $ModuleInfo = Import-Module -Name $Path -Force -PassThru
 
     <#
