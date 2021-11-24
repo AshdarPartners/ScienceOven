@@ -82,9 +82,10 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
         }
     }
 
-    Context 'Get-SqlServerDatabaseConfigurationFileGroup' {
+    Context 'Get-SqlServerDatabaseFileGroup' {
         It 'Returns some/any output for Get-SqlServerDatabaseConfigurationFileGroup' {
-            Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            Get-SqlServerDatabaseFileGroup @cp | Should -Not -BeNullOrEmpty
         }
     }
 
