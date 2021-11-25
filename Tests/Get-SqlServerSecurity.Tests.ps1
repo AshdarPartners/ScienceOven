@@ -72,7 +72,8 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
     Context 'Get-SqlServerSecurityServerRole' {
         It 'Returns some/any output for Get-SqlServerSecurityServerRole' {
-            Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
+            Get-SqlServerSecurityServerRole @cp | Should -Not -BeNullOrEmpty
         }
     }
 
