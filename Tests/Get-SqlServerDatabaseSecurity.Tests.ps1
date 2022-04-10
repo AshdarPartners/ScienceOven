@@ -84,8 +84,7 @@ Describe "Tests for Subject Area '$SubjectArea'" -Tag $SubjectArea, SQLServer {
 
     Context 'Get-SqlServerDatabaseSecuritySchema' {
         It 'Returns some/any output for Get-SqlServerDatabaseSecuritySchema' {
-            # Set-ItResult -Skipped -Because 'cmdlet has not been written yet.'
-            Get-SqlServerDatabaseSchema @cp | Should -Not -BeNullOrEmpty
+            Get-SqlServerDatabaseSchema @cp -IncludeSystemSchemas -IncludeSystemDatabases | Should -Not -BeNullOrEmpty
         }
     }
 

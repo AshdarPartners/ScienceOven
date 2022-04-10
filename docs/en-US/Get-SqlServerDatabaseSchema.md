@@ -14,7 +14,7 @@ Returns SqlServerDatabaseSchema data for a specific Sql Instance
 
 ```
 Get-SqlServerDatabaseSchema [-SqlInstance] <String[]> [[-ScanDateUTC] <DateTime>]
- [[-SqlCredential] <PSCredential>] [<CommonParameters>]
+ [[-SqlCredential] <PSCredential>] [-IncludeSystemDatabases] [-IncludeSystemSchemas] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -75,6 +75,36 @@ Aliases:
 Required: False
 Position: 3
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeSystemDatabases
+{{ Fill IncludeSystemDatabases Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IncludeSystemSchemas
+{{ Fill IncludeSystemSchemas Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

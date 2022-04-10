@@ -21,6 +21,12 @@ function Get-SqlServerDatabaseSchema {
     .PARAMETER SqlCredential
     What credential should be used? The default is to use the current user credential.
 
+    .PARAMETER IncludeSystemDatabases
+    Include the system databases.
+
+    .PARAMETER IncludeSystemSchemas
+    Include the system schemas.
+
     .EXAMPLE
     Get-SqlServerDatabaseSchema -SqlInstance localhost
 
@@ -34,8 +40,9 @@ function Get-SqlServerDatabaseSchema {
         [Parameter(ValueFromPipelineByPropertyName = $true, Mandatory = $true)]
         [string[]] $SqlInstance,
         [datetime] $ScanDateUTC = (Get-Date).ToUniversalTime(),
-        [System.Management.Automation.PSCredential] $SqlCredential
-
+        [System.Management.Automation.PSCredential] $SqlCredential,
+        [switch] $IncludeSystemDatabases,
+        [switch] $IncludeSystemSchemas
     )
 
     begin {
@@ -48,9 +55,9 @@ function Get-SqlServerDatabaseSchema {
             foreach ($c in $SqlInstance) {
 
                 if ($SqlCredential) {
-                    $Items = Get-DbaDbSchema -IncludeSystemSchemas -SqlInstance $c -SqlCredential $SqlCredential
+                    $Items = Get-DbaDbSchema -IncludeSystemSchemas:$IncludeSystemSchemas -IncludeSystemDatabases:$IncludeSystemDatabases -SqlInstance $c -SqlCredential $SqlCredential
                 } else {
-                    $Items = Get-DbaDbSchema -IncludeSystemSchemas -SqlInstance $c
+                    $Items = Get-DbaDbSchema -IncludeSystemSchemas:$IncludeSystemSchemas -IncludeSystemDatabases:$IncludeSystemDatabases -SqlInstance $c
                 }
 
                 foreach ($Item in $Items) {
