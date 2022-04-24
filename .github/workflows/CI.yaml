@@ -31,38 +31,6 @@ jobs:
         sleep 5
         #
 
-
-      # after some experimentation, I suspect that this commented-out stuff is all superfluous.
-      # The intent seems to be that Build.ps1 does "everything".
-      # These GH Actions/tasks/steps are shims to run stuff via build.ps1.
-
-      #########
-      # these pre-req installs really should be done in ./build.ps1. This whole step would become superfluous.
-      # if you want to do something like Invoke-DbaQuery or Publish-DbaDacpackage, you will need to install a correct version
-      # of dbatools here, or you will have to do it all in build.ps1 (which is probably the better idea)
-    # - name: Install Pre-Requisites
-    #   run: |
-    #     # These next two lines are mainly just debugging
-    #     # $PSVersionTable
-    #     # Get-Module -listavailable -Name dbatools,sqlserver,pester,PSScriptAnalyzer,psake,PowerShellBuild,BuildHelpers | select Name,Version
-    #     #
-    #     Set-PSRepository -Name 'PSGallery' -InstallationPolicy 'Trusted'
-    #     Install-Module -Name dbatools -RequiredVersion '1.1.0' -scope CurrentUser
-
-      #########
-    # - name:  Is MsSql Docker Container OK?
-    #   run: |
-    #     # DEBUGGING: Where are we, exactly? I need the path to the "Get Test info" PS1 files.
-    #     get-childitem .\Tests
-    #     #
-    #     Write-Host "INFO:Load Credentials and ServerInstance"
-    #     $cred = .\Tests\Get-TestSqlCredential.ps1
-    #     $ServerInstance = .\Tests\Get-TestSqlInstance.ps1
-    #     #
-    #     Write-Host "INFO:Starting a query to dump out system stuff for troubleshooting"
-    #     $Query = "select 'Try01' as EventName, GETDATE() RightNow, SUSER_SNAME() WhoamI, @@SERVERNAME as ServerName, @@VERSION as SqlServerVersion "
-    #     Invoke-DbaQuery -SqlCredential $Cred -SqlInstance $ServerInstance -query $Query
-
       #########
     - name: Run build.ps1 / Test
       # I am unsure if I 100% understand how this works, it was set up by Plaster
